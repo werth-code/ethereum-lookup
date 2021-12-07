@@ -1,5 +1,8 @@
 package com.werth.getethbalance;
 
+import com.werth.getethbalance.model.Block;
+import com.werth.getethbalance.model.BlockChain;
+import com.werth.getethbalance.model.Transaction;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.web3j.protocol.Web3j;
@@ -8,6 +11,7 @@ import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.http.HttpService;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 @SpringBootApplication
@@ -25,7 +29,23 @@ public class GetEthBalanceApplication {
 
 		BigInteger wei = ethGetBalance.getBalance();
 
-		System.out.println(wei);
+//		System.out.println("BigInteger Wallet Value: " + wei);
+
+		BlockChain blockChain = new BlockChain();
+		ArrayList<Block> blocks = blockChain.getBlockChain();
+
+		Block block1 = new Block(blockChain.getLastBlock().getHash());
+		block1.addTransaction(new Transaction("Transaction 1", wei));
+		blocks.add(block1);
+
+		Block block2 = new Block(blockChain.getLastBlock().getHash());
+		block2.addTransaction(new Transaction("Transaction 2", new BigInteger("300")));
+		blocks.add(block2);
+
+		System.out.println(block1);
+
+		System.out.println(block2);
+
 	}
 
 }
